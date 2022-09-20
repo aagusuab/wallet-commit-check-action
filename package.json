@@ -25,5 +25,6 @@
     "@types/sha": "^3.0.1",
     "buffer": "^6.0.3",
     "Buffer": "^0.0.0"
-  }
+  },
+  "type": "module"
 }
