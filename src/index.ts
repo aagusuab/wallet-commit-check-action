@@ -1,43 +1,40 @@
-import { getInput } from "@actions/core";
-import { context, getOctokit } from "@actions/github";
-import dedent from 'dedent'
+import * as core from "@actions/core";
+import * as github from "@actions/github";
+import * as exec from "@actions/exec";
 
-type GithubContext = typeof context;
+async function run(): Promise<void> {
+    try {
+        const commitSHA = github.context.sha;
+        core.debug(`Commit Message SHA:${commitSHA}`);
 
-const inputName = getInput("name");
-const ghToken = getInput("ghToken");
+        const message = await getCommitMessage(commitSHA);
+        core.debug(`Commit Message Found:\n${message}`);
 
-greet(inputName, getRepoUrl(context));
 
-getDiff().then(files => {
-    console.log(dedent(`
-    Your PR diff:
-    ${JSON.stringify(files, undefined, 2)}
-    `))
-})
-
-function greet(name: string, repoUrl: string) {
-    console.log(`'Hello ${name}! You are running a GH Action in ${repoUrl}'`);
-}
-
-function getRepoUrl({ repo, serverUrl }: GithubContext): string {
-    return `${serverUrl}/${repo.owner}/${repo.repo}`;
-}
-
-async function getDiff() {
-    if (ghToken && context.payload.pull_request) {
-        const octokit = getOctokit(ghToken)
-
-        const result = await octokit.rest.repos.compareCommits({
-            repo: context.repo.repo,
-            owner: context.repo.owner,
-            head: context.payload.pull_request.head.sha,
-            base: context.payload.pull_request.base.sha,
-            per_page: 100
-        })
-
-        return result.data.files || []
+        // No problem occured. Commit message is OK
+        core.info("Commit message is OK 😉🎉");
+    } catch (error) {
+        core.setFailed(`Action failed with error
+        ${error}`);
     }
-
-    return []
 }
+export async function getCommitMessage(sha: string): Promise<string> {
+    let message = "";
+
+    const options = {
+        listeners: {
+            stdout: (data: Buffer) => {
+                message += data.toString();
+            }
+        }
+    };
+
+    const args: string[] = ["rev-list", "--format=%B", "--max-count=1", sha];
+
+    await exec.exec("git", args, options);
+    message.trim();
+
+    return message;
+}
+
+run();

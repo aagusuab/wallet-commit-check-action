@@ -1,16 +1,6 @@
-name: 'Consonant vowel ratio'
-author: 'Chris Trzesniewski'
-description: 'Custom GH action with TypeScript'
-
-inputs:
-  name:
-    description: 'Name of repo'
-    required: false
-    default: ${{ github.event.repository.name }}
-  ghToken:
-    description: 'Github access token'
-    required: false
-    default: ${{ secrets.REPO_ACCESS_TOKEN }}
+name: 'Wallet Address Checker'
+author: 'Youn Jae Kim'
+description: 'Custom Wallet Address Checker Action'
 
 runs:
   using: 'node16'
