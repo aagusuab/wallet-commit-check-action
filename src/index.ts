@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import * as exec from "@actions/exec";
+import { ethers } from "ethers";
 
 async function run(): Promise<void> {
     try {
@@ -9,7 +10,11 @@ async function run(): Promise<void> {
 
         const message = await getCommitMessage(commitSHA);
         core.debug(`Commit Message Found:\n${message}`);
+        core.info(`message is ${message}`)
+        const splits = message.split(" ")
 
+        // only need to check the last string for address validation
+        await isAddressValid(splits[splits.length - 1])
 
         // No problem occured. Commit message is OK
         core.info("Commit message is OK 😉🎉");
@@ -35,6 +40,12 @@ export async function getCommitMessage(sha: string): Promise<string> {
     message.trim();
 
     return message;
+}
+
+export async function isAddressValid(address: string) {
+    if (!ethers.utils.isAddress(address)) {
+        throw new Error('Invalid Address')
+    }
 }
 
 run();
