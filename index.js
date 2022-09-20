@@ -1,9 +1,9 @@
-import * as core from "@actions/core";
-import * as commitMessages from '/commitMessage';
+const core = require('@actions/core');
+import {retrieve} from '/src/commitMessage';
 
 try {
     // const message = github.event.head_commit.message
-    const messages: string[] = commitMessages.retrieve();
+    const messages: string[] = retrieve();
     const messageLength = messages.length
     for (let i = 0; i < messageLength; i++){
         console.log(messages[i]);
