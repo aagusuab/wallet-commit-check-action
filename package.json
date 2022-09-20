@@ -19,7 +19,11 @@
   "homepage": "https://github.com/aagusuab/wallet-commit-check-action#readme",
   "dependencies": {
     "@actions/core": "^1.9.1",
+    "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.3",
-    "@octokit/action": "^4.0.8"
+    "@octokit/action": "^4.0.8",
+    "@types/sha": "^3.0.1",
+    "buffer": "^6.0.3",
+    "Buffer": "^0.0.0"
   }
 }
