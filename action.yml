@@ -1,6 +1,16 @@
-name: 'commit wallet address check'
-author: 'Youn Jae Kim'
-description: 'Check each commit for wallet address'
+name: 'Consonant vowel ratio'
+author: 'Chris Trzesniewski'
+description: 'Custom GH action with TypeScript'
+
+inputs:
+  name:
+    description: 'Name of repo'
+    required: false
+    default: ${{ github.event.repository.name }}
+  ghToken:
+    description: 'Github access token'
+    required: false
+    default: ${{ secrets.REPO_ACCESS_TOKEN }}
 
 runs:
   using: 'node16'
