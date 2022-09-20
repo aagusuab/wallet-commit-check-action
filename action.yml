@@ -1,5 +1,7 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'commit wallet address check'
+author: 'Youn Jae Kim'
+description: 'Check each commit for wallet address'
+
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist/index.js'
