@@ -9,7 +9,6 @@ async function run(): Promise<void> {
         core.debug(`Commit Message SHA:${commitSHA}`);
 
         const message = await getCommitMessage(commitSHA);
-        console.log("testing if this prints")
 
         core.debug(`Commit Message Found:\n${message}`);
         core.info(`message is ${message}`)
@@ -20,7 +19,6 @@ async function run(): Promise<void> {
             console.log(split)
         }
         core.info((splits.length - 1).toString())
-        console.log((splits.length - 1).toString())
         if (!ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`)
         }
