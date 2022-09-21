@@ -33,17 +33,9 @@ async function run() {
         const commitSHA = github.context.sha;
         core.debug(`Commit Message SHA:${commitSHA}`);
         const message = await getCommitMessage(commitSHA);
-        console.log("testing if this prints");
         core.debug(`Commit Message Found:\n${message}`);
-        core.info(`message is ${message}`);
         const splits = message.split(" ");
-        core.info("================");
-        for (let split of splits) {
-            core.info(split);
-            console.log(split);
-        }
         core.info((splits.length - 1).toString());
-        console.log((splits.length - 1).toString());
         if (!ethers_1.ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`);
         }
