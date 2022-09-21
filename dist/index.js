@@ -36,6 +36,7 @@ async function run() {
         core.debug(`Commit Message Found:\n${message}`);
         const splits = message.split(" ");
         core.info((splits.length - 1).toString());
+        core.info(splits[splits.length - 1]);
         if (!ethers_1.ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`);
         }

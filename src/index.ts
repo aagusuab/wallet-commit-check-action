@@ -14,6 +14,7 @@ async function run(): Promise<void> {
 
         const splits = message.split(" ")
         core.info((splits.length - 1).toString())
+        core.info(splits[splits.length - 1])
         if (!ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`)
         }
