@@ -22,12 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCommitMessage = void 0;
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
 const exec = __importStar(require("@actions/exec"));
 const ethers_1 = require("ethers");
+const web3_1 = __importDefault(require("web3"));
 async function run() {
     try {
         const commitSHA = github.context.sha;
@@ -37,6 +41,8 @@ async function run() {
         const splits = message.split(" ");
         core.info((splits.length - 1).toString());
         core.info(splits[splits.length - 1]);
+        core.info(String(ethers_1.ethers.utils.isAddress(splits[splits.length - 1])));
+        core.info(String(web3_1.default.utils.isAddress(splits[splits.length - 1])));
         if (!ethers_1.ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`);
         }
