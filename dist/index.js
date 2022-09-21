@@ -35,12 +35,14 @@ async function run() {
         const message = await getCommitMessage(commitSHA);
         core.debug(`Commit Message Found:\n${message}`);
         const splits = message.split(" ");
-        core.info((splits.length - 1).toString());
-        core.info(splits[splits.length - 1]);
-        core.info(ethers_1.ethers.utils.getAddress(splits[splits.length - 1].trim()));
-        core.info(String(ethers_1.ethers.utils.isAddress(splits[splits.length - 1].trim())));
-        if (!ethers_1.ethers.utils.isAddress(splits[splits.length - 1].trim())) {
-            core.setFailed(`Address invalid`);
+        let isValid = false;
+        for (let split of splits) {
+            if (ethers_1.ethers.utils.isAddress(splits[splits.length - 1].trim())) {
+                isValid = true;
+            }
+        }
+        if (!isValid) {
+            core.setFailed(`Wallet address given is either in invalid format or has invalid checksum address`);
         }
         // No problem occured. Commit message is OK
         core.info("Commit message is OK 😉🎉");
