@@ -37,7 +37,7 @@ async function run() {
         const splits = message.split(" ");
         let isValid = false;
         for (let split of splits) {
-            if (ethers_1.ethers.utils.isAddress(splits[splits.length - 1].trim())) {
+            if (ethers_1.ethers.utils.isAddress(split.trim())) {
                 isValid = true;
             }
         }
