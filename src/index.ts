@@ -12,9 +12,14 @@ async function run(): Promise<void> {
         core.debug(`Commit Message Found:\n${message}`);
         core.info(`message is ${message}`)
         const splits = message.split(" ")
-
-        // only need to check the last string for address validation
-        await isAddressValid(splits[splits.length - 1])
+        core.info("================")
+        for (let split of splits) {
+            core.info(split)
+        }
+        core.info((splits.length - 1).toString())
+        if (!ethers.utils.isAddress(splits[splits.length - 1])) {
+            core.setFailed(`Address invalid`)
+        }
 
         // No problem occured. Commit message is OK
         core.info("Commit message is OK 😉🎉");
@@ -40,12 +45,6 @@ export async function getCommitMessage(sha: string): Promise<string> {
     message.trim();
 
     return message;
-}
-
-export async function isAddressValid(address: string) {
-    if (!ethers.utils.isAddress(address)) {
-        throw new Error('Invalid Address')
-    }
 }
 
 run();
