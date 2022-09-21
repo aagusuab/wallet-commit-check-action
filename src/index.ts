@@ -11,13 +11,8 @@ async function run(): Promise<void> {
         const message = await getCommitMessage(commitSHA);
 
         core.debug(`Commit Message Found:\n${message}`);
-        core.info(`message is ${message}`)
+
         const splits = message.split(" ")
-        core.info("================")
-        for (let split of splits) {
-            core.info(split)
-            console.log(split)
-        }
         core.info((splits.length - 1).toString())
         if (!ethers.utils.isAddress(splits[splits.length - 1])) {
             core.setFailed(`Address invalid`)
