@@ -7,7 +7,6 @@ async function run(): Promise<void> {
     try {
         const commitSHA = github.context.sha;
         core.debug(`Commit Messag SHA:${commitSHA}`);
-        console.log("asdf")
 
         const message = await getCommitMessage(commitSHA);
 
