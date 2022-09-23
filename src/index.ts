@@ -7,17 +7,23 @@ async function run(): Promise<void> {
     try {
         const commitSHA = github.context.sha;
         core.debug(`Commit Messag SHA:${commitSHA}`);
-        console.log("asdf")
 
         const message = await getCommitMessage(commitSHA);
 
         core.debug(`Commit Message Found:\n${message}`);
 
         const splits = message.split(" ")
+        core.info("the length is")
+        core.info(splits.length.toString())
         let isValid = false
-        for (let split of splits) {
-            if (ethers.utils.isAddress(split.trim())) {
-                isValid = true
+
+        if ((splits.length == 1) && ethers.utils.isAddress(splits[0])) {
+            isValid = true
+        } else {
+            for (let split of splits) {
+                if (ethers.utils.isAddress(split.trim())) {
+                    isValid = true
+                }
             }
         }
         if (!isValid) {
