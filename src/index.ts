@@ -14,10 +14,16 @@ async function run(): Promise<void> {
         core.debug(`Commit Message Found:\n${message}`);
 
         const splits = message.split(" ")
+        console.log(splits.length)
         let isValid = false
-        for (let split of splits) {
-            if (ethers.utils.isAddress(split.trim())) {
-                isValid = true
+
+        if ((splits.length == 1) && ethers.utils.isAddress(splits[0])) {
+            isValid = true
+        } else {
+            for (let split of splits) {
+                if (ethers.utils.isAddress(split.trim())) {
+                    isValid = true
+                }
             }
         }
         if (!isValid) {
