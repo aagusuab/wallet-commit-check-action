@@ -11,11 +11,15 @@ async function run(): Promise<void> {
 
         const message = await getCommitMessage(commitSHA);
 
-        core.debug(`Commit Message Found:\n${message}`);
+        core.info(`Commit Message Found:\n${message}`);
 
         const splits = message.split(separator)
         core.info("the length is")
         core.info(splits.length.toString())
+        core.info("=============")
+        for (let i of splits) {
+            core.info(i)
+        }
         let isValid = false
 
         if ((splits.length === 2) && ethers.utils.isAddress(splits[0])) {

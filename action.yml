@@ -6,7 +6,7 @@ inputs:
   separator:
     description: 'This will determine how the messages will be split for wallet address validation.'
     required: true
-    default: ' '
+    default: " "
 runs:
   using: 'node16'
   main: 'dist/index.js'
