@@ -11,6 +11,7 @@ async function run(): Promise<void> {
 
         const message = await getCommitMessage(commitSHA);
 
+        // Note that "commit" and "commitId" will be always included in the commit message retrieved.
         core.info(`Commit Message Found:\n${message}`);
 
         const splits = message.split(separator)
@@ -22,7 +23,7 @@ async function run(): Promise<void> {
         }
         let isValid = false
 
-        if ((splits.length === 2) && ethers.utils.isAddress(splits[0])) {
+        if ((splits.length === 1) && ethers.utils.isAddress(splits[0])) {
             isValid = true
         } else {
             for (let split of splits) {
@@ -56,10 +57,8 @@ export async function getCommitMessage(sha: string): Promise<string> {
     const args: string[] = ["rev-list", "--format=%B", "--max-count=1", sha];
 
     await exec.exec("git", args, options);
-    message.trim();
-    core.info("The message is: ")
-    core.info(message.trim())
-    return message;
+    //First 48 characters are "commit {commitId}\n"
+    return message.substring(48).trim()
 }
 
 run();

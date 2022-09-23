@@ -49365,6 +49365,7 @@ async function run() {
         const commitSHA = github.context.sha;
         core.debug(`Commit Message SHA:${commitSHA}`);
         const message = await getCommitMessage(commitSHA);
+        // Note that "commit" and "commitId" will be always included in the commit message retrieved.
         core.info(`Commit Message Found:\n${message}`);
         const splits = message.split(separator);
         core.info("the length is");
@@ -49374,7 +49375,7 @@ async function run() {
             core.info(i);
         }
         let isValid = false;
-        if ((splits.length === 2) && ethers_1.ethers.utils.isAddress(splits[0])) {
+        if ((splits.length === 1) && ethers_1.ethers.utils.isAddress(splits[0])) {
             isValid = true;
         }
         else {
@@ -49406,10 +49407,8 @@ async function getCommitMessage(sha) {
     };
     const args = ["rev-list", "--format=%B", "--max-count=1", sha];
     await exec.exec("git", args, options);
-    message.trim();
-    core.info("The message is: ");
-    core.info(message.trim());
-    return message;
+    //First 48 characters are "commit {commitId}\n"
+    return message.substring(48).trim();
 }
 exports.getCommitMessage = getCommitMessage;
 run();
