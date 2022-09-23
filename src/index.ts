@@ -5,19 +5,20 @@ import { ethers } from "ethers";
 
 async function run(): Promise<void> {
     try {
+        const separator = core.getInput('separator')
         const commitSHA = github.context.sha;
-        core.debug(`Commit Messag SHA:${commitSHA}`);
+        core.debug(`Commit Message SHA:${commitSHA}`);
 
         const message = await getCommitMessage(commitSHA);
 
         core.debug(`Commit Message Found:\n${message}`);
 
-        const splits = message.split(" ")
+        const splits = message.split(separator)
         core.info("the length is")
         core.info(splits.length.toString())
         let isValid = false
 
-        if ((splits.length == 1) && ethers.utils.isAddress(splits[0])) {
+        if ((splits.length == 2) && ethers.utils.isAddress(splits[0])) {
             isValid = true
         } else {
             for (let split of splits) {
@@ -52,7 +53,8 @@ export async function getCommitMessage(sha: string): Promise<string> {
 
     await exec.exec("git", args, options);
     message.trim();
-
+    core.info("The message is: ")
+    core.info(message.trim())
     return message;
 }
 
