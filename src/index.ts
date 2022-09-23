@@ -18,7 +18,7 @@ async function run(): Promise<void> {
         core.info(splits.length.toString())
         let isValid = false
 
-        if ((splits.length == 2) && ethers.utils.isAddress(splits[0])) {
+        if ((splits.length === 2) && ethers.utils.isAddress(splits[0])) {
             isValid = true
         } else {
             for (let split of splits) {
