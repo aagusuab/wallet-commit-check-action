@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 
 async function run(): Promise<void> {
     try {
-        const separator = core.getInput('separator')
+        const separator = core.getInput('separator', {trimWhitespace: false})
         const commitSHA = github.context.sha;
         core.debug(`Commit Message SHA:${commitSHA}`);
 

@@ -49361,7 +49361,7 @@ const exec = __importStar(__nccwpck_require__(2049));
 const ethers_1 = __nccwpck_require__(3519);
 async function run() {
     try {
-        const separator = core.getInput('separator');
+        const separator = core.getInput('separator', { trimWhitespace: false });
         const commitSHA = github.context.sha;
         core.debug(`Commit Message SHA:${commitSHA}`);
         const message = await getCommitMessage(commitSHA);
