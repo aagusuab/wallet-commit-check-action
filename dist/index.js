@@ -49365,10 +49365,14 @@ async function run() {
         const commitSHA = github.context.sha;
         core.debug(`Commit Message SHA:${commitSHA}`);
         const message = await getCommitMessage(commitSHA);
-        core.debug(`Commit Message Found:\n${message}`);
+        core.info(`Commit Message Found:\n${message}`);
         const splits = message.split(separator);
         core.info("the length is");
         core.info(splits.length.toString());
+        core.info("=============");
+        for (let i of splits) {
+            core.info(i);
+        }
         let isValid = false;
         if ((splits.length === 2) && ethers_1.ethers.utils.isAddress(splits[0])) {
             isValid = true;
