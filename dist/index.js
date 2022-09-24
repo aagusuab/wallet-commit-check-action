@@ -49354,35 +49354,53 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCommitMessage = void 0;
+exports.retrieveWalletAddress = exports.getCommitMessage = void 0;
 const core = __importStar(__nccwpck_require__(5127));
 const github = __importStar(__nccwpck_require__(3134));
 const exec = __importStar(__nccwpck_require__(2049));
 const ethers_1 = __nccwpck_require__(3519);
 async function run() {
     try {
+        const owner = core.getInput('owner');
+        const repo = core.getInput('repo');
         const separator = core.getInput('separator', { trimWhitespace: false });
         const commitSHA = github.context.sha;
-        core.debug(`Commit Message SHA:${commitSHA}`);
         const message = await getCommitMessage(commitSHA);
-        // Note that "commit" and "commitId" will be always included in the commit message retrieved.
-        core.info(`Commit Message Found:\n${message}`);
+        //TODO Might have to include the eventType as well.
         const splits = message.split(separator);
-        core.info("the length is");
-        core.info(splits.length.toString());
-        core.info("=============");
-        for (let i of splits) {
-            core.info(i);
-        }
         let isValid = false;
+        let retrievedWalletAddress = "";
         if ((splits.length === 1) && ethers_1.ethers.utils.isAddress(splits[0])) {
+            retrievedWalletAddress = splits[0];
             isValid = true;
         }
         else {
             for (let split of splits) {
                 if (ethers_1.ethers.utils.isAddress(split.trim())) {
+                    retrievedWalletAddress = split.trim();
                     isValid = true;
                 }
+            }
+        }
+        let walletAddressInCurrentPr = [];
+        // Retrieve all the current wallet address that is found in the PR
+        if (github.context.eventName == "pull_request") {
+            let currentPRNumber = github.context.issue.number;
+            const token = core.getInput('github-token', { required: false } || process.env.GITHUB_TOKEN);
+            let octokit = github.getOctokit(token);
+            let commitsInPr = await octokit.request(`GET /repos/{owner}/{repo}/pulls/{pull_number}/commits`, {
+                owner: owner,
+                repo: repo,
+                pull_number: currentPRNumber
+            });
+            for (let commit of commitsInPr.data) {
+                let walletAddress = await retrieveWalletAddress(commit.commit.message, separator);
+                if (walletAddress != "") {
+                    walletAddressInCurrentPr.push(walletAddress);
+                }
+            }
+            if (retrievedWalletAddress == "" || !walletAddressInCurrentPr.includes(retrievedWalletAddress)) {
+                isValid = false;
             }
         }
         if (!isValid) {
@@ -49411,6 +49429,24 @@ async function getCommitMessage(sha) {
     return message.substring(48).trim();
 }
 exports.getCommitMessage = getCommitMessage;
+async function retrieveWalletAddress(message, separator) {
+    const splits = message.split(separator);
+    for (let i of splits) {
+        core.info(i);
+    }
+    if ((splits.length === 1) && ethers_1.ethers.utils.isAddress(splits[0])) {
+        return splits[0];
+    }
+    else {
+        for (let split of splits) {
+            if (ethers_1.ethers.utils.isAddress(split.trim())) {
+                return split.trim();
+            }
+        }
+    }
+    return "";
+}
+exports.retrieveWalletAddress = retrieveWalletAddress;
 run();
 
 

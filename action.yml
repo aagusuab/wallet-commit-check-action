@@ -3,6 +3,18 @@ author: 'Youn Jae Kim'
 description: 'Custom Wallet Address Checker Action'
 
 inputs:
+  pull-request-number:
+    required: false
+    description: The current number of the pull request
+    default: ${{ github.event.issue.number }}
+  repo-owner:
+    required: false
+    description: The owner of the repository
+    default: ${{ github.repo.name }}
+  github-token:
+    required: false
+    description: The GitHub token used to create an authenticated client.  Defaults to github provided token.
+    default: ${{ github.token }}
   separator:
     description: 'This will determine how the messages will be split for wallet address validation.'
     required: true
