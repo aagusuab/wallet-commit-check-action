@@ -7,10 +7,12 @@ inputs:
     required: false
     description: The current number of the pull request
     default: ${{ github.event.issue.number }}
-  repo-owner:
-    required: false
+  owner:
+    required: true
     description: The owner of the repository
-    default: ${{ github.repo.name }}
+  repo:
+    required: true
+    description: name of the repo
   github-token:
     required: false
     description: The GitHub token used to create an authenticated client.  Defaults to github provided token.

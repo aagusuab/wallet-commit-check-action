@@ -10,6 +10,9 @@ async function run(): Promise<void> {
         const separator = core.getInput('separator', {trimWhitespace: false})
         const commitSHA = github.context.sha;
 
+        core.info(repo)
+        core.info(owner)
+
         const message = await getCommitMessage(commitSHA);
 
         //TODO Might have to include the eventType as well.
@@ -78,16 +81,11 @@ export async function getCommitMessage(sha: string): Promise<string> {
     const args: string[] = ["rev-list", "--format=%B", "--max-count=1", sha];
 
     await exec.exec("git", args, options);
-    //First 48 characters are "commit {commitId}\n"
     return message.substring(48).trim()
 }
 
 export async function retrieveWalletAddress(message: string, separator: string): Promise<string> {
     const splits = message.split(separator)
-
-    for (let i of splits) {
-        core.info(i)
-    }
 
     if ((splits.length === 1) && ethers.utils.isAddress(splits[0])) {
         return splits[0]
