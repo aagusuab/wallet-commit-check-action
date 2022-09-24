@@ -33,6 +33,8 @@ async function run(): Promise<void> {
             }
         }
 
+        core.info(`wallet address is ${ retrievedWalletAddress}`)
+
         let walletAddressInCurrentPr = []
         // Retrieve all the current wallet address that is found in the PR
         if (github.context.eventName == "pull_request") {
@@ -45,7 +47,9 @@ async function run(): Promise<void> {
                 repo: repo,
                 pull_number: currentPRNumber
             })
+            core.info("commit messages:")
             for (let commit of commitsInPr.data) {
+                core.info(commit.commit.message)
                 let walletAddress = await retrieveWalletAddress(commit.commit.message, separator)
                 if (walletAddress != "") {
                     walletAddressInCurrentPr.push(walletAddress)
